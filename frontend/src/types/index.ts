@@ -42,3 +42,12 @@ export interface ApiResponse {
 export type error = {
   message: string;
 };
+
+export type ModelProps = {
+  path: string;
+};
+
+export type SceneViewerProps = {
+  path: string;
+  enableZoom: boolean;
+};

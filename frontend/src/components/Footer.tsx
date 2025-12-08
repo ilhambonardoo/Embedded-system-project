@@ -16,7 +16,7 @@ const Footer = () => {
   return (
     <motion.div
       variants={itemVariants}
-      className="my-12 sm:mt-16 pt-8 sm:pt-10 border-t border-neutral-800 text-center"
+      className="py-7 border-t border-neutral-800 text-center"
     >
       <p className="text-gray-500 text-xs sm:text-sm">
         © 2025 CHOP-X • Embedded System Monitoring Platform

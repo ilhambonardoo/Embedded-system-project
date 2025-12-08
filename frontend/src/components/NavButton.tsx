@@ -13,8 +13,8 @@ export default function NavButton({
       onClick={onClick}
       className={`relative px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-md transition-all duration-300 cursor-pointer ${
         active
-          ? "text-black"
-          : "text-gray-400 hover:text-white hover:bg-white/5"
+          ? "text-black w-full"
+          : "text-gray-400 hover:text-white hover:bg-white/5 w-full"
       }`}
     >
       {active && (

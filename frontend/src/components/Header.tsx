@@ -75,7 +75,6 @@ export default function Header({
 
             <div className="w-px h-6 sm:h-8 bg-white/10 hidden sm:block" />
 
-            {/* Time */}
             <div className="text-right">
               <div className="text-base sm:text-xl font-mono font-bold text-white leading-none">
                 {now.toLocaleTimeString("en-GB", {
