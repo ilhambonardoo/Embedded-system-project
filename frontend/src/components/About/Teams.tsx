@@ -3,6 +3,7 @@ import { useState } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { teamMembers, itemVariants } from "../../utils/constants";
 
+
 const Teams = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
