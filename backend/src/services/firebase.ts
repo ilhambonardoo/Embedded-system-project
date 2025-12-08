@@ -8,9 +8,10 @@ let serviceAccount;
 if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
   try {
     serviceAccount = JSON.parse(
-      Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_KEY, "base64").toString(
-        "utf-8"
-      )
+      Buffer.from(
+        process.env.FIREBASE_SERVICE_ACCOUNT_KEY || "./serviceAccountKey.json",
+        "base64"
+      ).toString("utf-8")
     );
   } catch (err) {
     console.error(
