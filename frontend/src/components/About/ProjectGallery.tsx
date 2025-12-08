@@ -48,7 +48,7 @@ const ProjectGallery = () => {
                   target.style.display = "none";
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-2">
+              <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-2">
                 <p className="text-xs font-semibold text-white line-clamp-1">
                   {item.title}
                 </p>
@@ -90,7 +90,7 @@ const ProjectGallery = () => {
                     target.style.display = "none";
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3 sm:p-4">
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3 sm:p-4">
                   <p className="text-xs sm:text-sm font-semibold text-white">
                     {item.title}
                   </p>
