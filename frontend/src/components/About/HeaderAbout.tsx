@@ -1,15 +1,5 @@
 import { motion } from "framer-motion";
-const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      type: "spring" as const,
-      stiffness: 100,
-    },
-  },
-};
+import { itemVariants } from "../../utils/constants";
 
 const HeaderAbout = () => {
   return (

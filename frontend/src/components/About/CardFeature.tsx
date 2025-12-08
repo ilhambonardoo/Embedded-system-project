@@ -1,38 +1,6 @@
 import { motion } from "framer-motion";
-import {
-  IoRocketOutline,
-  IoShieldCheckmarkOutline,
-  IoSpeedometerOutline,
-} from "react-icons/io5";
-const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      type: "spring" as const,
-      stiffness: 100,
-    },
-  },
-};
-
-const features = [
-  {
-    icon: <IoSpeedometerOutline className="text-white text-2xl" />,
-    title: "Real-time Monitoring",
-    desc: "Pemantauan sensor dengan latensi rendah...",
-  },
-  {
-    icon: <IoShieldCheckmarkOutline className="text-white text-2xl" />,
-    title: "Sistem baik dan siap pakai",
-    desc: "Kuat dan tahan lama",
-  },
-  {
-    icon: <IoRocketOutline className="text-white text-2xl" />,
-    title: "Fitur modern",
-    desc: "Memiliki fitur canggih berbasis IoT dan Web",
-  },
-];
+import { features } from "../../utils/constants";
+import { itemVariants } from "../../utils/constants";
 
 const CardFeature = () => {
   return (
