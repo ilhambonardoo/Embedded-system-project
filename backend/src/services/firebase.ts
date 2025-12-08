@@ -4,8 +4,12 @@ import fs from "fs";
 
 dotenv.config();
 
-const serviceAccountPath =
-  process.env.FIREBASE_SERVICE_ACCOUNT_PATH || "./serviceAccountKey.json";
+const serviceAccountPath = JSON.parse(
+  Buffer.from(
+    process.env.FIREBASE_SERVICE_ACCOUNT_PATH || "./serviceAccountKey.json",
+    "base64"
+  ).toString("utf-8")
+);
 
 if (!fs.existsSync(serviceAccountPath)) {
   console.error("❌ Service account key not found:", serviceAccountPath);
