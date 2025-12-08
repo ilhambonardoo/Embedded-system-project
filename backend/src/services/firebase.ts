@@ -1,25 +1,36 @@
 import admin from "firebase-admin";
 import dotenv from "dotenv";
-import fs from "fs";
 
 dotenv.config();
 
-const serviceAccountPath = JSON.parse(
-  Buffer.from(
-    process.env.FIREBASE_SERVICE_ACCOUNT_PATH || "./serviceAccountKey.json",
-    "base64"
-  ).toString("utf-8")
-);
+let serviceAccount;
 
-if (!fs.existsSync(serviceAccountPath)) {
-  console.error("❌ Service account key not found:", serviceAccountPath);
+if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
+  try {
+    serviceAccount = JSON.parse(
+      Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_KEY, "base64").toString(
+        "utf-8"
+      )
+    );
+  } catch (err) {
+    console.error(
+      "❌ Failed to decode FIREBASE_SERVICE_ACCOUNT_KEY from env",
+      err
+    );
+    process.exit(1);
+  }
+} else {
   console.error(
-    "   Please download from Firebase Console → Project Settings → Service Accounts"
+    "❌ FIREBASE_SERVICE_ACCOUNT_KEY not found in environment variables"
+  );
+  console.error(
+    "   Set it in .env file or deploy platform (Railway, Vercel, etc)"
+  );
+  console.error(
+    "   Generate it with: cat backend/serviceAccountKey.json | base64"
   );
   process.exit(1);
 }
-
-const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf-8"));
 
 const dbUrl = process.env.FIREBASE_DB_URL;
 const appOptions: admin.AppOptions = dbUrl
