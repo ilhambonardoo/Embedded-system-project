@@ -25,11 +25,10 @@ const ProjectGallery = () => {
           variants={itemVariants}
           className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto"
         >
-          Dokumentasi perjalanan tim mengerjakan project
+          Documentation of the team's journey working on the project
         </motion.p>
       </div>
 
-      {/* Mobile View - 2x2 Grid */}
       <div className="grid grid-cols-2 gap-2 sm:hidden">
         {galleryItems.slice(0, 4).map((item) => (
           <motion.div
@@ -58,7 +57,6 @@ const ProjectGallery = () => {
         ))}
       </div>
 
-      {/* Desktop View - Masonry */}
       <div className="hidden sm:block">
         <div className="columns-2 lg:columns-3 xl:columns-4 gap-4 sm:gap-6">
           {galleryItems.map((item, index) => (
