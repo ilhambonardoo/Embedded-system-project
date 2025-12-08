@@ -20,21 +20,21 @@ const teamMembers = [
     role: "F1",
     description:
       "Dedicated team mengembangkan platform monitoring real-time berkinerja tinggi dengan teknologi terkini.",
-    url: "/public/Teams/tim1.jpeg",
+    url: "/assets/Teams/tim1.jpeg",
   },
   {
     name: " Embedded System Team",
     role: "F1",
     description:
       "Dedicated team mengembangkan platform monitoring real-time berkinerja tinggi dengan teknologi terkini.",
-    url: "/public/Teams/tim2.jpeg",
+    url: "/assets/Teams/tim2.jpeg",
   },
   {
     name: " Embedded System Team",
     role: "F1",
     description:
       "Dedicated team mengembangkan platform monitoring real-time berkinerja tinggi dengan teknologi terkini.",
-    url: "/public/Teams/tim3.jpeg",
+    url: "/assets/Teams/tim3.jpeg",
   },
 ];
 
