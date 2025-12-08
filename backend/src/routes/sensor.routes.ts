@@ -21,7 +21,6 @@ db.ref("/").on("value", (snapshot) => {
   }
 });
 
-// GET /api/sensors - Baca semua sensor data
 router.get("/", async (req: Request, res: Response) => {
   try {
     const currentData =
@@ -53,7 +52,7 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
-// GET /api/sensors/:sensor - Baca sensor tertentu
+// GET /api/sensors/:sensor -> membaca sensor tertentu
 router.get("/:sensor", async (req: Request, res: Response) => {
   try {
     const { sensor } = req.params;
