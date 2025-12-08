@@ -89,7 +89,7 @@ export default function SensorTable({ history, onClear }: SensorTableProps) {
                 </span>
               </div>
               <h3 className="text-lg md:text-xl font-semibold text-neutral-800 tracking-tight">
-                Riwayat Data
+                Data History
               </h3>
             </div>
 
