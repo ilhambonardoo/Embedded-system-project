@@ -95,17 +95,17 @@ export const features = [
   {
     icon: <IoSpeedometerOutline className="text-white text-2xl" />,
     title: "Real-time Monitoring",
-    desc: "Pemantauan sensor dengan latensi rendah...",
+    desc: "Low latency sensor monitoring...",
   },
   {
     icon: <IoShieldCheckmarkOutline className="text-white text-2xl" />,
-    title: "Sistem baik dan siap pakai",
-    desc: "Kuat dan tahan lama",
+    title: "The system is good and ready to use",
+    desc: "Strong and durable",
   },
   {
     icon: <IoRocketOutline className="text-white text-2xl" />,
-    title: "Fitur modern",
-    desc: "Memiliki fitur canggih berbasis IoT dan Web",
+    title: "Modern Feature",
+    desc: "Has advanced IoT and Web-based feature",
   },
 ];
 

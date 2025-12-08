@@ -25,11 +25,10 @@ const ProjectGallery = () => {
           variants={itemVariants}
           className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto"
         >
-          Dokumentasi perjalanan tim mengerjakan project
+          Documentation of the team's journey working on the project
         </motion.p>
       </div>
 
-      {/* Mobile View - 2x2 Grid */}
       <div className="grid grid-cols-2 gap-2 sm:hidden">
         {galleryItems.slice(0, 4).map((item) => (
           <motion.div
@@ -48,7 +47,7 @@ const ProjectGallery = () => {
                   target.style.display = "none";
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-2">
+              <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-2">
                 <p className="text-xs font-semibold text-white line-clamp-1">
                   {item.title}
                 </p>
@@ -58,7 +57,6 @@ const ProjectGallery = () => {
         ))}
       </div>
 
-      {/* Desktop View - Masonry */}
       <div className="hidden sm:block">
         <div className="columns-2 lg:columns-3 xl:columns-4 gap-4 sm:gap-6">
           {galleryItems.map((item, index) => (
@@ -90,7 +88,7 @@ const ProjectGallery = () => {
                     target.style.display = "none";
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3 sm:p-4">
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3 sm:p-4">
                   <p className="text-xs sm:text-sm font-semibold text-white">
                     {item.title}
                   </p>

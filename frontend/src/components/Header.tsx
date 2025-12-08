@@ -10,7 +10,25 @@ export default function Header({
   currentPage: "dashboard" | "about";
 }) {
   const [now, setNow] = useState(new Date());
-  const [status] = useState<"OPERASIONAL" | "WARNING" | "STOP">("OPERASIONAL");
+  const [backendConnected, setBackendConnected] = useState(false);
+
+  useEffect(() => {
+    const checkBackendConnection = async () => {
+      try {
+        const response = await fetch(
+          import.meta.env.VITE_API_BASE || "http://localhost:4000/api/sensors"
+        );
+        setBackendConnected(response.ok);
+      } catch {
+        setBackendConnected(false);
+      }
+    };
+    checkBackendConnection();
+    const interval = setInterval(checkBackendConnection, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const status = backendConnected ? "OPERASIONAL" : "DISCONNECTED";
 
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 1000);
@@ -68,7 +86,7 @@ export default function Header({
                       : "text-red-500"
                   }`}
                 >
-                  {status === "OPERASIONAL" ? "OK" : status}
+                  {status === "OPERASIONAL" ? "ACTIVE" : status}
                 </span>
               </div>
             </div>
