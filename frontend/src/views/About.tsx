@@ -1,18 +1,10 @@
 import { motion } from "framer-motion";
+import { containerVariants } from "../utils/constants";
 import HeaderAbout from "../components/About/HeaderAbout";
 import CardFeature from "../components/About/CardFeature";
+import ProjectGallery from "../components/About/ProjectGallery";
 import Teams from "../components/About/Teams";
 import ProductCard from "../components/About/ProductCard";
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-    },
-  },
-};
 
 export default function About() {
   return (
@@ -28,6 +20,7 @@ export default function About() {
         <Teams />
       </motion.div>
       <ProductCard />
+      <ProjectGallery />
     </div>
   );
 }

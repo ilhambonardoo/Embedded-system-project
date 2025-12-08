@@ -1,42 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
+import { teamMembers, itemVariants } from "../../utils/constants";
 
-const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      type: "spring" as const,
-      stiffness: 100,
-    },
-  },
-};
-
-const teamMembers = [
-  {
-    name: " Embedded System Team",
-    role: "F1",
-    description:
-      "Dedicated team mengembangkan platform monitoring real-time berkinerja tinggi dengan teknologi terkini.",
-    url: "/assets/Teams/tim1.jpeg",
-  },
-  {
-    name: " Embedded System Team",
-    role: "F1",
-    description:
-      "Dedicated team mengembangkan platform monitoring real-time berkinerja tinggi dengan teknologi terkini.",
-    url: "/assets/Teams/tim2.jpeg",
-  },
-  {
-    name: " Embedded System Team",
-    role: "F1",
-    description:
-      "Dedicated team mengembangkan platform monitoring real-time berkinerja tinggi dengan teknologi terkini.",
-    url: "/assets/Teams/tim3.jpeg",
-  },
-];
 
 const Teams = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
