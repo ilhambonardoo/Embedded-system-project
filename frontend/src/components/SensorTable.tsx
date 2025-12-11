@@ -4,6 +4,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { FiDownload, FiTrash2 } from "react-icons/fi";
 import { formatTime, formatDate } from "../utils/DateFormatter";
+import { formatKwh, formatRupiah } from "../utils/CurrencyFormat";
 
 interface SensorTableProps {
   history: SensorData[];
@@ -21,13 +22,23 @@ export default function SensorTable({ history, onClear }: SensorTableProps) {
     doc.setTextColor(100);
     doc.text(`Dicetak pada: ${new Date().toLocaleString("id-ID")}`, 14, 22);
 
-    const tableColumn = ["Waktu", "Tanggal", "Berat (KG)", "PWM (%)", "RPM"];
+    const tableColumn = [
+      "Time",
+      "Date",
+      "Weight (KG)",
+      "PWM (%)",
+      "RPM",
+      "Energy (kWh)",
+      "Cost (IDR)",
+    ];
     const tableRows = history.map((row) => [
       formatTime(row.timestamp),
       formatDate(row.timestamp),
       row.berat?.toFixed(2) || "0.00",
       row.pwm || "0",
       row.rpm || "0",
+      row.total_kwh ? formatKwh(row.total_kwh) : "0.00",
+      row.total_cost ? formatRupiah(row.total_cost) : "Rp 0",
     ]);
 
     autoTable(doc, {
@@ -54,6 +65,8 @@ export default function SensorTable({ history, onClear }: SensorTableProps) {
         2: { halign: "right", fontStyle: "bold" },
         3: { halign: "right" },
         4: { halign: "right" },
+        5: { halign: "right", fontStyle: "bold" },
+        6: { halign: "right", fontStyle: "bold" },
       },
       alternateRowStyles: {
         fillColor: [245, 245, 245],
@@ -70,6 +83,12 @@ export default function SensorTable({ history, onClear }: SensorTableProps) {
       onClear();
     }
   };
+
+  const totalKwh = history.reduce((sum, row) => sum + (row.total_kwh || 0), 0);
+  const totalCost = history.reduce(
+    (sum, row) => sum + (row.total_cost || 0),
+    0
+  );
 
   return (
     <section className="w-full">
@@ -120,14 +139,14 @@ export default function SensorTable({ history, onClear }: SensorTableProps) {
         </div>
 
         <div className="overflow-y-auto overflow-x-auto flex-1 custom-scrollbar p-0">
-          <table className="w-full text-left border-collapse min-w-[500px] md:min-w-full">
+          <table className="w-full text-left border-collapse min-w-[650px] md:min-w-full">
             <thead className="bg-neutral-50 sticky top-0 z-10">
               <tr>
                 <th className="py-3 px-4 md:py-4 md:px-6 text-[10px] font-bold tracking-widest text-neutral-500 uppercase border-b border-neutral-100">
-                  Waktu
+                  Time
                 </th>
                 <th className="py-3 px-4 md:py-4 md:px-6 text-[10px] font-bold tracking-widest text-neutral-500 uppercase border-b border-neutral-100 text-right">
-                  Berat <span className="hidden sm:inline">(KG)</span>
+                  Weight <span className="hidden sm:inline">(KG)</span>
                 </th>
                 <th className="py-3 px-4 md:py-4 md:px-6 text-[10px] font-bold tracking-widest text-neutral-500 uppercase border-b border-neutral-100 text-right">
                   PWM
@@ -135,13 +154,19 @@ export default function SensorTable({ history, onClear }: SensorTableProps) {
                 <th className="py-3 px-4 md:py-4 md:px-6 text-[10px] font-bold tracking-widest text-neutral-500 uppercase border-b border-neutral-100 text-right">
                   RPM
                 </th>
+                <th className="py-3 px-4 md:py-4 md:px-6 text-[10px] font-bold tracking-widest text-neutral-500 uppercase border-b border-neutral-100 text-right hidden md:table-cell">
+                  Energy <span className="hidden lg:inline">(kWh)</span>
+                </th>
+                <th className="py-3 px-4 md:py-4 md:px-6 text-[10px] font-bold tracking-widest text-neutral-500 uppercase border-b border-neutral-100 text-right hidden lg:table-cell">
+                  Cost (IDR)
+                </th>
               </tr>
             </thead>
             <tbody>
               {!Array.isArray(history) || history.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={4}
+                    colSpan={6}
                     className="text-center py-10 text-neutral-400 text-sm"
                   >
                     Tidak ada data yang tersedia
@@ -171,12 +196,42 @@ export default function SensorTable({ history, onClear }: SensorTableProps) {
                     <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800">
                       {row.rpm || 0}
                     </td>
+                    <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800 hidden md:table-cell">
+                      {row.total_kwh ? formatKwh(row.total_kwh) : "0.00"}
+                    </td>
+                    <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800 hidden lg:table-cell">
+                      {row.total_cost ? formatRupiah(row.total_cost) : "Rp 0"}
+                    </td>
                   </motion.tr>
                 ))
               )}
             </tbody>
           </table>
         </div>
+
+        {/* Summary Footer */}
+        {history.length > 0 && (
+          <div className="border-t border-neutral-100 bg-neutral-50 p-4 md:p-6 flex flex-col sm:flex-row gap-4 justify-end">
+            <div className="text-right">
+              <p className="text-[10px] font-bold tracking-widest text-neutral-500 uppercase">
+                Total Energy
+              </p>
+              <p className="text-base md:text-lg font-mono font-bold text-black mt-1">
+                {formatKwh(totalKwh)}{" "}
+                <span className="text-xs text-neutral-500">kWh</span>
+              </p>
+            </div>
+            <div className="h-8 w-px bg-neutral-200 hidden sm:block"></div>
+            <div className="text-right">
+              <p className="text-[10px] font-bold tracking-widest text-neutral-500 uppercase">
+                Total Cost
+              </p>
+              <p className="text-base md:text-lg font-mono font-bold text-black mt-1">
+                {formatRupiah(totalCost)}
+              </p>
+            </div>
+          </div>
+        )}
       </motion.div>
     </section>
   );

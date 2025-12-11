@@ -45,7 +45,7 @@ export default function Header({
             </div>
             <div>
               <h1 className="text-sm sm:text-lg font-bold tracking-wider text-white leading-none">
-                CHOP<span className="text-gray-400">-X</span>
+                COOLMAX
               </h1>
               <div className="text-[8px] sm:text-[10px] text-gray-500 tracking-[0.15em] sm:tracking-[0.2em] uppercase">
                 Control Unit v2.0
