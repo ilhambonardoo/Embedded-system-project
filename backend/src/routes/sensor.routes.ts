@@ -4,22 +4,6 @@ import { db } from "../services/firebase";
 const router = Router();
 
 const sensorHistory: any[] = [];
-const MAX_HISTORY = 20;
-
-db.ref("/").on("value", (snapshot) => {
-  const data = snapshot.val();
-
-  if (data) {
-    const record = {
-      ...data,
-      timestamp: Date.now(),
-    };
-    sensorHistory.push(record);
-    if (sensorHistory.length > MAX_HISTORY) {
-      sensorHistory.shift();
-    }
-  }
-});
 
 router.get("/", async (req: Request, res: Response) => {
   try {

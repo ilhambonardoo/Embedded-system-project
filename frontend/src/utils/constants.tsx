@@ -8,22 +8,17 @@ export const teamMembers = [
   {
     name: " Embedded System Team",
     role: "F1",
-    description:
-      "Dedicated team mengembangkan platform monitoring real-time berkinerja tinggi dengan teknologi terkini.",
+
     url: "/Teams/tim1.jpeg",
   },
   {
     name: " Embedded System Team",
     role: "F1",
-    description:
-      "Dedicated team mengembangkan platform monitoring real-time berkinerja tinggi dengan teknologi terkini.",
     url: "/Teams/tim2.jpeg",
   },
   {
     name: " Embedded System Team",
     role: "F1",
-    description:
-      "Dedicated team mengembangkan platform monitoring real-time berkinerja tinggi dengan teknologi terkini.",
     url: "/Teams/tim3.jpeg",
   },
 ];
@@ -36,27 +31,27 @@ export const galleryItems = [
   },
   {
     id: 2,
-    title: "Hardware Assembly",
+    title: "Casing Design",
     image: "/gallery/2.jpg",
   },
   {
     id: 3,
-    title: "Testing & Debugging",
+    title: "Real Casing",
     image: "/gallery/3.jpg",
   },
   {
     id: 4,
-    title: "Team Collaboration",
+    title: "Enumerator",
     image: "/gallery/4.jpg",
   },
   {
     id: 5,
-    title: "Dashboard Development",
+    title: "Work",
     image: "/gallery/5.jpg",
   },
   {
     id: 6,
-    title: "Final Presentation",
+    title: "Before Presentation",
     image: "/gallery/6.jpg",
   },
   {
@@ -66,28 +61,34 @@ export const galleryItems = [
   },
   {
     id: 8,
-    title: "Final Presentation",
+    title: "Work",
     image: "/gallery/8.jpg",
   },
   {
     id: 9,
-    title: "Final Presentation",
+    title: "Circuit Diagram",
     image: "/gallery/9.jpg",
   },
   {
     id: 10,
-    title: "Final Presentation",
+    title: "Final_Report",
+    pdf: "/gallery/Final_Report.pdf",
     image: "/gallery/10.jpg",
+    type: "pdf",
   },
   {
     id: 11,
-    title: "Final Presentation",
+    title: "Technology Overview",
+    pdf: "/gallery/GAMTEK.pdf",
     image: "/gallery/11.jpg",
+    type: "pdf",
   },
   {
     id: 12,
-    title: "Final Presentation",
+    title: "LOGBOOK",
+    pdf: "/gallery/LOGBOOK.pdf",
     image: "/gallery/12.jpg",
+    type: "pdf",
   },
 ];
 
