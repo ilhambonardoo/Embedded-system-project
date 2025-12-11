@@ -3,7 +3,6 @@ import { useState } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { teamMembers, itemVariants } from "../../utils/constants";
 
-
 const Teams = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -59,9 +58,6 @@ const Teams = () => {
                     </h3>
                     <p className="text-sm sm:text-base md:text-lg font-bold text-gray-600 mb-4 uppercase tracking-widest">
                       {teamMembers[currentSlide].role}
-                    </p>
-                    <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
-                      {teamMembers[currentSlide].description}
                     </p>
                   </motion.div>
                 </div>

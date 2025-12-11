@@ -1,6 +1,7 @@
 import { useSensorBackend } from "../hooks/useSensorBackend";
 import SensorDisplay from "../components/SensorDisplay";
 import SensorTable from "../components/SensorTable";
+import PowerCost from "../components/PowerCost";
 
 export default function Dashboard() {
   const { sensors, history, loading, error, clearHistory } = useSensorBackend();
@@ -15,6 +16,7 @@ export default function Dashboard() {
         )}
 
         <SensorDisplay sensors={sensors} loading={loading} history={history} />
+        <PowerCost sensors={sensors} loading={loading} />
         <SensorTable history={history} onClear={clearHistory} />
       </main>
     </div>

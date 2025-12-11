@@ -16,7 +16,7 @@ export default function SensorDisplay({
   const sensorList = [
     {
       id: "berat",
-      name: "BERAT",
+      name: "Weight",
       value: sensors.berat,
       unit: "KG",
       color: "#000000",

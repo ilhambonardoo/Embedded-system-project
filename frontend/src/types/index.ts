@@ -10,25 +10,13 @@ export type SensorBase = {
   history: Sample[];
 };
 
-export type RFIDSensor = {
-  name: string;
-  lastScanned: string | null;
-  isAuthorized: boolean;
-  history: { ts: number; id: string; authorized: boolean }[];
-};
-
-export type SensorsState = {
-  ir: SensorBase;
-  load: SensorBase;
-  power: SensorBase;
-  rfid: RFIDSensor;
-};
-
 export type SensorData = {
   berat?: number;
   pwm?: number;
   rpm?: number;
   timestamp?: string;
+  total_cost?: number;
+  total_kwh?: number;
 };
 
 export interface ApiResponse {
