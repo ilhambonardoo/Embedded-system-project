@@ -166,7 +166,7 @@ const ProjectGallery = () => {
               />
               <button
                 onClick={() => setSelectedImage(null)}
-                className="sm:hidden absolute top-45 right-0 bg-black/60 hover:bg-black/80 p-2 rounded-full text-white transition-all duration-300 z-10"
+                className="sm:hidden absolute top-4 right-0 bg-black/60 hover:bg-black/80 p-2 rounded-full text-white transition-all duration-300 z-10"
               >
                 <FiX size={24} />
               </button>
@@ -190,7 +190,7 @@ const ProjectGallery = () => {
             >
               <button
                 onClick={() => setSelectedPdf(null)}
-                className="sm:hidden absolute top-45 right-4 bg-black/60 hover:bg-black/80 p-2 rounded-full text-white transition-all duration-300 z-10"
+                className="sm:hidden absolute top-4 right-4 bg-black/60 hover:bg-black/80 p-2 rounded-full text-white transition-all duration-300 z-10"
               >
                 <FiX size={24} />
               </button>
