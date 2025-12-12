@@ -154,11 +154,11 @@ export default function SensorTable({ history, onClear }: SensorTableProps) {
                 <th className="py-3 px-4 md:py-4 md:px-6 text-[10px] font-bold tracking-widest text-neutral-500 uppercase border-b border-neutral-100 text-right">
                   RPM
                 </th>
-                <th className="py-3 px-4 md:py-4 md:px-6 text-[10px] font-bold tracking-widest text-neutral-500 uppercase border-b border-neutral-100 text-right hidden md:table-cell">
+                <th className="py-3 px-4 md:py-4 md:px-6 text-[10px] font-bold tracking-widest text-neutral-500 uppercase border-b border-neutral-100 text-right  md:table-cell">
                   Energy <span className="hidden lg:inline">(kWh)</span>
                 </th>
-                <th className="py-3 px-4 md:py-4 md:px-6 text-[10px] font-bold tracking-widest text-neutral-500 uppercase border-b border-neutral-100 text-right hidden lg:table-cell">
-                  Cost (IDR)
+                <th className="py-3 px-4 md:py-4 md:px-6 text-[10px] font-bold tracking-widest text-neutral-500 uppercase border-b border-neutral-100 text-right  lg:table-cell">
+                  Cost <span className="hidden lg:inline">(IDR)</span>
                 </th>
               </tr>
             </thead>
@@ -196,10 +196,10 @@ export default function SensorTable({ history, onClear }: SensorTableProps) {
                     <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800">
                       {row.rpm || 0}
                     </td>
-                    <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800 hidden md:table-cell">
+                    <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800  md:table-cell">
                       {row.total_kwh ? formatKwh(row.total_kwh) : "0.00"}
                     </td>
-                    <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800 hidden lg:table-cell">
+                    <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800  lg:table-cell">
                       {row.total_cost ? formatRupiah(row.total_cost) : "Rp 0"}
                     </td>
                   </motion.tr>

@@ -22,14 +22,6 @@ if (process.env.NODE_ENV !== "production") {
   );
 }
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-  app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-  });
-}
-
 // routes
 // Ngecek doang
 app.get("/health", (req: Request, res: Response) => {
@@ -38,6 +30,23 @@ app.get("/health", (req: Request, res: Response) => {
 
 app.get("/api/sensors", sensorsRouter);
 app.use("/api/sensors", sensorsRouter);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+}
+app.use((req: Request, res: Response, next: NextFunction) => {
+  if (
+    req.path.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/)
+  ) {
+    return next();
+  }
+
+  if (!req.path.startsWith("/api")) {
+    return res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+  }
+
+  next();
+});
 
 // 404
 app.use((req: Request, res: Response) => {

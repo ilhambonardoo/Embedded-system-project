@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FiX } from "react-icons/fi";
 import {
   galleryItems,
   itemVariants,
@@ -163,6 +164,12 @@ const ProjectGallery = () => {
                   target.style.display = "none";
                 }}
               />
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="sm:hidden absolute top-4 right-0 bg-black/60 hover:bg-black/80 p-2 rounded-full text-white transition-all duration-300 z-10"
+              >
+                <FiX size={24} />
+              </button>
             </motion.div>
           </motion.div>
         )}
@@ -181,6 +188,12 @@ const ProjectGallery = () => {
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-lg overflow-hidden"
             >
+              <button
+                onClick={() => setSelectedPdf(null)}
+                className="sm:hidden absolute top-4 right-4 bg-black/60 hover:bg-black/80 p-2 rounded-full text-white transition-all duration-300 z-10"
+              >
+                <FiX size={24} />
+              </button>
               <iframe
                 src={selectedPdf}
                 className="w-full h-[90vh]"
