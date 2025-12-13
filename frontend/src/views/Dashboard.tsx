@@ -17,7 +17,11 @@ export default function Dashboard() {
 
         <SensorDisplay sensors={sensors} loading={loading} history={history} />
         <PowerCost sensors={sensors} loading={loading} />
-        <SensorTable history={history} onClear={clearHistory} />
+        <SensorTable
+          history={history}
+          onClear={clearHistory}
+          sensors={sensors}
+        />
       </main>
     </div>
   );

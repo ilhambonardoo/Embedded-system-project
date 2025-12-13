@@ -1,14 +1,23 @@
 import { Router, type Request, type Response } from "express";
 import { db } from "../services/firebase";
+import { sensorHistory } from "../services/powerMonitor";
 
 const router = Router();
-
-const sensorHistory: any[] = [];
 
 router.get("/", async (req: Request, res: Response) => {
   try {
     const currentData =
       sensorHistory.length > 0 ? sensorHistory[sensorHistory.length - 1] : {};
+
+    const today = new Date().toISOString().split("T")[0];
+    const dailyStatsSnap = await db.ref(`daily_stats/${today}`).once("value");
+    const dailyStats = dailyStatsSnap.val();
+
+    const mergedCurrentData = {
+      ...currentData,
+      total_cost: dailyStats?.total_cost || 0,
+      total_kwh: dailyStats?.total_kwh || 0,
+    };
 
     if (sensorHistory.length === 0) {
       const snap = await db.ref("/").once("value");
@@ -26,7 +35,7 @@ router.get("/", async (req: Request, res: Response) => {
     res.json({
       ok: true,
       data: {
-        current: currentData,
+        current: mergedCurrentData,
         history: sensorHistory,
       },
     });

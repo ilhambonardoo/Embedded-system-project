@@ -1,7 +1,7 @@
 import { db } from "../services/firebase";
 import { MOTOR_SPECS, MAX_POWER_WATT, TARIF_PLN_PER_KWH } from "../config";
 
-const sensorHistory: any[] = [];
+export const sensorHistory: any[] = [];
 const MAX_HISTORY = 20;
 let lastProcessTime = Date.now();
 let lastResetDate = new Date().toISOString().split("T")[0];
@@ -56,26 +56,23 @@ db.ref("/").on("value", (snapshot) => {
 
   if (data) {
     checkAndResetDailyStats();
-    const record = {
-      ...data,
-      timestamp: Date.now(),
-    };
-    sensorHistory.push(record);
-    if (sensorHistory.length > MAX_HISTORY) {
-      sensorHistory.shift();
-    }
 
-    if (typeof data.pwm !== undefined) {
+    let recordKwh = 0;
+    let recordCost = 0;
+
+    if (data.pwm !== undefined && data.pwm !== null && Number(data.pwm) > 0) {
       const now = Date.now();
-      const timeDiffHours = (now - lastProcessTime) / (1000 * 3600);
-      lastProcessTime = now;
+      const timeDiffMs = now - lastProcessTime;
+      const timeDiffHours = timeDiffMs / (1000 * 3600);
 
       if (timeDiffHours > 0 && timeDiffHours < 1) {
         let currentWatt =
           (Number(data.pwm) / MOTOR_SPECS.MAX_PWM) * MAX_POWER_WATT;
 
-        const kwhUsed = (currentWatt / 1000) * timeDiffHours;
-        const costRp = kwhUsed * TARIF_PLN_PER_KWH;
+        recordKwh = (currentWatt / 1000) * timeDiffHours;
+        recordCost = recordKwh * TARIF_PLN_PER_KWH;
+
+        lastProcessTime = now;
 
         const today = new Date().toISOString().split("T")[0];
         const statsRef = db.ref(`daily_stats/${today}`);
@@ -83,17 +80,29 @@ db.ref("/").on("value", (snapshot) => {
         statsRef.transaction((currentStats) => {
           if (!currentStats) {
             return {
-              total_kwh: kwhUsed,
-              total_cost: costRp,
+              total_kwh: recordKwh,
+              total_cost: recordCost,
+              date: today,
             };
           }
           return {
             ...currentStats,
-            total_kwh: (currentStats.total_kwh || 0) + kwhUsed,
-            total_cost: (currentStats.total_cost || 0) + costRp,
+            total_kwh: (currentStats.total_kwh || 0) + recordKwh,
+            total_cost: (currentStats.total_cost || 0) + recordCost,
+            date: today,
           };
         });
       }
+    }
+    const record = {
+      ...data,
+      total_kwh: recordKwh,
+      total_cost: recordCost,
+      timestamp: Date.now(),
+    };
+    sensorHistory.push(record);
+    if (sensorHistory.length > MAX_HISTORY) {
+      sensorHistory.shift();
     }
   }
 });
