@@ -8,5 +8,5 @@ export const formatRupiah = (value: number): string => {
 };
 
 export const formatKwh = (value: number): string => {
-  return value.toFixed(2);
+  return value.toFixed(4);
 };

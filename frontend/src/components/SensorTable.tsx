@@ -9,9 +9,14 @@ import { formatKwh, formatRupiah } from "../utils/CurrencyFormat";
 interface SensorTableProps {
   history: SensorData[];
   onClear: () => void;
+  sensors?: SensorData;
 }
 
-export default function SensorTable({ history, onClear }: SensorTableProps) {
+export default function SensorTable({
+  history,
+  onClear,
+  sensors,
+}: SensorTableProps) {
   const handleExportPDF = () => {
     const doc = new jsPDF();
 
@@ -84,11 +89,8 @@ export default function SensorTable({ history, onClear }: SensorTableProps) {
     }
   };
 
-  const totalKwh = history.reduce((sum, row) => sum + (row.total_kwh || 0), 0);
-  const totalCost = history.reduce(
-    (sum, row) => sum + (row.total_cost || 0),
-    0
-  );
+  const totalKwh = sensors?.total_kwh || 0;
+  const totalCost = sensors?.total_cost || 0;
 
   return (
     <section className="w-full">
