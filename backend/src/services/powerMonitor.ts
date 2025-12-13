@@ -77,32 +77,55 @@ db.ref("/").on("value", (snapshot) => {
         const today = new Date().toISOString().split("T")[0];
         const statsRef = db.ref(`daily_stats/${today}`);
 
-        statsRef.transaction((currentStats) => {
-          if (!currentStats) {
+        statsRef
+          .transaction((currentStats) => {
+            if (!currentStats) {
+              return {
+                total_kwh: recordKwh,
+                total_cost: recordCost,
+                date: today,
+              };
+            }
             return {
-              total_kwh: recordKwh,
-              total_cost: recordCost,
+              ...currentStats,
+              total_kwh: (currentStats.total_kwh || 0) + recordKwh,
+              total_cost: (currentStats.total_cost || 0) + recordCost,
               date: today,
             };
-          }
-          return {
-            ...currentStats,
-            total_kwh: (currentStats.total_kwh || 0) + recordKwh,
-            total_cost: (currentStats.total_cost || 0) + recordCost,
-            date: today,
-          };
-        });
+          })
+          .then(() => {
+            statsRef.once("value", (statsSnapshot) => {
+              const updatedStats = statsSnapshot.val();
+
+              const record = {
+                ...data,
+                total_kwh: updatedStats?.total_kwh || 0,
+                total_cost: updatedStats?.total_cost || 0,
+                timestamp: Date.now(),
+              };
+              sensorHistory.push(record);
+              if (sensorHistory.length > MAX_HISTORY) {
+                sensorHistory.shift();
+              }
+            });
+          });
       }
-    }
-    const record = {
-      ...data,
-      total_kwh: recordKwh,
-      total_cost: recordCost,
-      timestamp: Date.now(),
-    };
-    sensorHistory.push(record);
-    if (sensorHistory.length > MAX_HISTORY) {
-      sensorHistory.shift();
+    } else {
+      const today = new Date().toISOString().split("T")[0];
+      db.ref(`daily_stats/${today}`).once("value", (statsSnapshot) => {
+        const currentStats = statsSnapshot.val();
+
+        const record = {
+          ...data,
+          total_kwh: currentStats?.total_kwh || 0,
+          total_cost: currentStats?.total_cost || 0,
+          timestamp: Date.now(),
+        };
+        sensorHistory.push(record);
+        if (sensorHistory.length > MAX_HISTORY) {
+          sensorHistory.shift();
+        }
+      });
     }
   }
 });
