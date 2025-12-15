@@ -10,8 +10,21 @@ export function useSensorBackend() {
   const isClearedRef = useRef(false);
 
   const clearHistory = async () => {
-    setHistory([]);
-    isClearedRef.current = true;
+    try {
+      const apiBase = import.meta.env.VITE_API_BASE || "http://localhost:4000";
+      const response = await fetch(`${apiBase}/api/sensors/clear-history`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      setHistory([]);
+      isClearedRef.current = true;
+    } catch (err) {
+      setError(String(err));
+    }
   };
 
   const fetchSensor = async () => {
@@ -49,5 +62,5 @@ export function useSensorBackend() {
     return () => clearInterval(interval);
   }, []);
 
-  return { sensors, loading, error, history, clearHistory };
+  return { sensors, loading, error, history, clearHistory, fetchSensor };
 }

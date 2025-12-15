@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import type { SensorData } from "../types";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { FiDownload, FiTrash2 } from "react-icons/fi";
+import { FiDownload, FiRefreshCw, FiTrash2 } from "react-icons/fi";
 import { formatTime, formatDate } from "../utils/DateFormatter";
 import { formatKwh, formatRupiah } from "../utils/CurrencyFormat";
 
@@ -10,12 +10,14 @@ interface SensorTableProps {
   history: SensorData[];
   onClear: () => void;
   sensors?: SensorData;
+  onRefresh?: () => void;
 }
 
 export default function SensorTable({
   history,
   onClear,
   sensors,
+  onRefresh,
 }: SensorTableProps) {
   const handleExportPDF = () => {
     const doc = new jsPDF();
@@ -36,15 +38,18 @@ export default function SensorTable({
       "Energy (kWh)",
       "Cost (IDR)",
     ];
-    const tableRows = history.map((row) => [
-      formatTime(row.timestamp),
-      formatDate(row.timestamp),
-      row.berat?.toFixed(2) || "0.00",
-      row.pwm || "0",
-      row.rpm || "0",
-      row.total_kwh ? formatKwh(row.total_kwh) : "0.00",
-      row.total_cost ? formatRupiah(row.total_cost) : "Rp 0",
-    ]);
+    const tableRows = history
+      .slice()
+      .reverse()
+      .map((row) => [
+        formatTime(row.timestamp),
+        formatDate(row.timestamp),
+        row.berat?.toFixed(2) || "0.00",
+        row.pwm || "0",
+        row.rpm || "0",
+        row.total_kwh ? formatKwh(row.total_kwh) : "0.00",
+        row.total_cost ? formatRupiah(row.total_cost) : "Rp 0",
+      ]);
 
     autoTable(doc, {
       head: [tableColumn],
@@ -119,7 +124,14 @@ export default function SensorTable({
             </div>
           </div>
 
-          <div className="flex gap-2 w-full md:w-auto">
+          <div className="flex gap-2 w-full md:w-auto text-center">
+            <button
+              onClick={onRefresh}
+              className="flex-1 md:flex-none justify-center items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 border border-blue-100 text-xs font-bold rounded-full hover:bg-blue-100 hover:text-blue-700 transition-all group cursor-pointer"
+            >
+              <FiRefreshCw className="text-lg" />
+              REFRESH
+            </button>
             <button
               onClick={handleClearClick}
               disabled={history.length === 0}
@@ -175,37 +187,40 @@ export default function SensorTable({
                   </td>
                 </tr>
               ) : (
-                history.map((row, idx) => (
-                  <motion.tr
-                    key={idx}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0 }}
-                    className="group border-b border-neutral-50 hover:bg-neutral-50 transition-colors duration-200"
-                  >
-                    <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm text-neutral-600 font-medium whitespace-nowrap">
-                      {formatTime(row.timestamp)}
-                      <span className="block text-[9px] md:text-[10px] text-neutral-400 font-normal">
-                        {new Date(row.timestamp || "").toLocaleDateString()}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800">
-                      {row.berat?.toFixed(2) || "0.00"}
-                    </td>
-                    <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800">
-                      {row.pwm || 0}
-                    </td>
-                    <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800">
-                      {row.rpm || 0}
-                    </td>
-                    <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800  md:table-cell">
-                      {row.total_kwh ? formatKwh(row.total_kwh) : "0.00"}
-                    </td>
-                    <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800  lg:table-cell">
-                      {row.total_cost ? formatRupiah(row.total_cost) : "Rp 0"}
-                    </td>
-                  </motion.tr>
-                ))
+                history
+                  .slice()
+                  .reverse()
+                  .map((row, idx) => (
+                    <motion.tr
+                      key={idx}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0 }}
+                      className="group border-b border-neutral-50 hover:bg-neutral-50 transition-colors duration-200"
+                    >
+                      <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm text-neutral-600 font-medium whitespace-nowrap">
+                        {formatTime(row.timestamp)}
+                        <span className="block text-[9px] md:text-[10px] text-neutral-400 font-normal">
+                          {new Date(row.timestamp || "").toLocaleDateString()}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800">
+                        {row.berat?.toFixed(2) || "0.00"}
+                      </td>
+                      <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800">
+                        {row.pwm || 0}
+                      </td>
+                      <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800">
+                        {row.rpm || 0}
+                      </td>
+                      <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800  md:table-cell">
+                        {row.total_kwh ? formatKwh(row.total_kwh) : "0.00"}
+                      </td>
+                      <td className="py-3 px-4 md:py-4 md:px-6 text-xs md:text-sm font-mono text-black font-bold text-right group-hover:text-neutral-800  lg:table-cell">
+                        {row.total_cost ? formatRupiah(row.total_cost) : "Rp 0"}
+                      </td>
+                    </motion.tr>
+                  ))
               )}
             </tbody>
           </table>
