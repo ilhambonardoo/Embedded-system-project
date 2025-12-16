@@ -4,14 +4,12 @@ import { Area, AreaChart, ResponsiveContainer } from "recharts";
 
 interface SensorDisplayProps {
   sensors: SensorData;
-  loading: boolean;
   history: SensorData[];
 }
 
 export default function SensorDisplay({
   sensors,
   history,
-  loading,
 }: SensorDisplayProps) {
   const sensorList = [
     {
@@ -39,28 +37,6 @@ export default function SensorDisplay({
       format: (v?: number) => v || 0,
     },
   ];
-
-  if (loading) {
-    return (
-      <section className="w-full mb-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {[1, 2, 3].map((idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0.5 }}
-              animate={{ opacity: 1 }}
-              transition={{
-                duration: 0.8,
-                repeat: Infinity,
-                repeatType: "reverse",
-              }}
-              className="bg-neutral-100 rounded-3xl h-56 w-full"
-            />
-          ))}
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section className="w-full mb-8">

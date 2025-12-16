@@ -1,33 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import type { SensorData, ApiResponse } from "../types";
 
 export function useSensorBackend() {
   const [sensors, setSensors] = useState<SensorData>({});
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<SensorData[]>([]);
 
   const isClearedRef = useRef(false);
 
-  const clearHistory = async () => {
-    try {
-      const apiBase = import.meta.env.VITE_API_BASE || "http://localhost:4000";
-      const response = await fetch(`${apiBase}/api/sensors/clear-history`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      setHistory([]);
-      isClearedRef.current = true;
-    } catch (err) {
-      setError(String(err));
-    }
-  };
-
-  const fetchSensor = async () => {
+  const fetchSensor = useCallback(async () => {
     try {
       const apiBase = import.meta.env.VITE_API_BASE || "http://localhost:4000";
       const response = await fetch(`${apiBase}/api/sensors`);
@@ -40,27 +21,54 @@ export function useSensorBackend() {
 
       setSensors(result.data?.current || {});
 
-      if (!isClearedRef.current) {
-        const historyData = result.data?.history;
-        if (Array.isArray(historyData)) {
-          setHistory(historyData);
+      const historyData = result.data?.history;
+      if (Array.isArray(historyData)) {
+        if (isClearedRef.current) {
+          if (historyData.length > 0) {
+            setHistory(historyData);
+            isClearedRef.current = false;
+          } else {
+            setHistory([]);
+          }
         } else {
-          setHistory([]);
+          setHistory(historyData);
         }
+      } else {
+        setHistory([]);
       }
 
       setError(null);
     } catch (err) {
       setError(String(err));
     } finally {
-      setLoading(false);
     }
-  };
+  }, []);
+
+  const clearHistory = useCallback(async () => {
+    try {
+      isClearedRef.current = true;
+      setHistory([]);
+
+      const apiBase = import.meta.env.VITE_API_BASE || "http://localhost:4000";
+      const response = await fetch(`${apiBase}/api/sensors/clear-history`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      await fetchSensor();
+    } catch (err) {
+      setError(String(err));
+    }
+  }, [fetchSensor]);
+
   useEffect(() => {
     fetchSensor();
     const interval = setInterval(fetchSensor, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchSensor]);
 
-  return { sensors, loading, error, history, clearHistory, fetchSensor };
+  return { sensors, error, history, clearHistory, fetchSensor };
 }

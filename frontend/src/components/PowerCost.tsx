@@ -4,26 +4,9 @@ import { formatRupiah, formatKwh } from "../utils/CurrencyFormat";
 
 interface PowerCostProps {
   sensors: SensorData;
-  loading: boolean;
 }
 
-const PowerCost = ({ sensors, loading }: PowerCostProps) => {
-  if (loading) {
-    return (
-      <section className="w-full mb-8">
-        <motion.div
-          initial={{ opacity: 0.5 }}
-          animate={{ opacity: 1 }}
-          transition={{
-            duration: 0.8,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-          className="bg-neutral-100 rounded-3xl h-56 w-full"
-        />
-      </section>
-    );
-  }
+const PowerCost = ({ sensors,  }: PowerCostProps) => {
 
   const costItems = [
     {
