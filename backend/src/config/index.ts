@@ -6,3 +6,4 @@ export const MOTOR_SPECS = {
 
 export const MAX_POWER_WATT = MOTOR_SPECS.VOLTAGE * MOTOR_SPECS.MAX_AMPERE;
 export const TARIF_PLN_PER_KWH = 1444.7;
+export const MIN_EFFECTIVE_PWM_PERCENT = 0.02

@@ -1,5 +1,5 @@
 import { db } from "../services/firebase";
-import { MOTOR_SPECS, MAX_POWER_WATT, TARIF_PLN_PER_KWH } from "../config";
+import { MOTOR_SPECS, MAX_POWER_WATT, TARIF_PLN_PER_KWH, MIN_EFFECTIVE_PWM_PERCENT } from "../config";
 
 export const sensorHistory: any[] = [];
 const MAX_HISTORY = 20;
@@ -51,6 +51,7 @@ const checkAndResetDailyStats = () => {
 
 scheduleResetCheck();
 
+
 db.ref("/").on("value", (snapshot) => {
   const data = snapshot.val();
 
@@ -66,9 +67,17 @@ db.ref("/").on("value", (snapshot) => {
       const timeDiffHours = timeDiffMs / (1000 * 3600);
 
       if (timeDiffHours > 0 && timeDiffHours < 1) {
-        let currentWatt =
-          (Number(data.pwm) / MOTOR_SPECS.MAX_PWM) * MAX_POWER_WATT;
+     
 
+        const pwmRaw = Number(data.pwm) || 0;
+        const pwmClamped = Math.max(0, Math.min(pwmRaw, MOTOR_SPECS.MAX_PWM));
+        const pwmPercent = pwmClamped / MOTOR_SPECS.MAX_PWM;
+
+        const currentWatt =
+          pwmPercent < MIN_EFFECTIVE_PWM_PERCENT
+            ? 0
+            : pwmPercent * MAX_POWER_WATT;
+          
         recordKwh = (currentWatt / 1000) * timeDiffHours;
         recordCost = recordKwh * TARIF_PLN_PER_KWH;
 

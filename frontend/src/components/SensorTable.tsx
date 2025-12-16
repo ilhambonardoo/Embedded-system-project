@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import type { SensorData } from "../types";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { FiDownload, FiRefreshCw, FiTrash2 } from "react-icons/fi";
+import { FiDownload, FiTrash2 } from "react-icons/fi";
 import { formatTime, formatDate } from "../utils/DateFormatter";
 import { formatKwh, formatRupiah } from "../utils/CurrencyFormat";
 
@@ -10,14 +10,12 @@ interface SensorTableProps {
   history: SensorData[];
   onClear: () => void;
   sensors?: SensorData;
-  onRefresh?: () => void;
 }
 
 export default function SensorTable({
   history,
   onClear,
   sensors,
-  onRefresh,
 }: SensorTableProps) {
   const handleExportPDF = () => {
     const doc = new jsPDF();
@@ -125,13 +123,7 @@ export default function SensorTable({
           </div>
 
           <div className="flex gap-2 w-full md:w-auto text-center">
-            <button
-              onClick={onRefresh}
-              className="flex-1 md:flex-none justify-center items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 border border-blue-100 text-xs font-bold rounded-full hover:bg-blue-100 hover:text-blue-700 transition-all group cursor-pointer"
-            >
-              <FiRefreshCw className="text-lg" />
-              REFRESH
-            </button>
+            {/* Refresh button removed */}
             <button
               onClick={handleClearClick}
               disabled={history.length === 0}
