@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import type { SensorData, ApiResponse } from "../types";
 
 export function useSensorBackend() {
@@ -29,7 +29,6 @@ export function useSensorBackend() {
       setError(null);
     } catch (err) {
       setError(String(err));
-    } finally {
     }
   }, []);
 
