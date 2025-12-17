@@ -63,17 +63,4 @@ router.get("/:sensor", async (req: Request, res: Response) => {
   }
 });
 
-router.delete("/clear-history", async (req: Request, res: Response) => {
-  try {
-    sensorHistory.length = 0;
-    res.json({
-      ok: true,
-      message: "History cleared successfully",
-    });
-  } catch (err) {
-    console.error("Error clearing history:", err);
-    res.status(500).json({ err });
-  }
-});
-
 export default router;
