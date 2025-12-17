@@ -4,7 +4,7 @@ import SensorTable from "../components/SensorTable";
 import PowerCost from "../components/PowerCost";
 
 export default function Dashboard() {
-  const { sensors, history, error, clearHistory } = useSensorBackend();
+  const { sensors, history, error } = useSensorBackend();
 
   return (
     <div className="pb-32">
@@ -17,11 +17,7 @@ export default function Dashboard() {
 
         <SensorDisplay sensors={sensors} history={history} />
         <PowerCost sensors={sensors} />
-        <SensorTable
-          history={history}
-          onClear={clearHistory}
-          sensors={sensors}
-        />
+        <SensorTable history={history} sensors={sensors} />
       </main>
     </div>
   );
