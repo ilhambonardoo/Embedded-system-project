@@ -1,56 +1,18 @@
-import { db } from "../services/firebase";
-import { MOTOR_SPECS, MAX_POWER_WATT, TARIF_PLN_PER_KWH, MIN_EFFECTIVE_PWM_PERCENT } from "../config";
+import { db } from "./firebase";
+import {
+  MOTOR_SPECS,
+  MAX_POWER_WATT,
+  TARIF_PLN_PER_KWH,
+  MIN_EFFECTIVE_PWM_PERCENT,
+} from "../config";
+import { scheduleResetCheck, checkAndResetDailyStats } from "./DailyStats";
 
 export const sensorHistory: any[] = [];
 const MAX_HISTORY = 20;
 let lastProcessTime = Date.now();
-let lastResetDate = new Date().toISOString().split("T")[0];
-let resetCheckSchedule = false;
-
-const scheduleResetCheck = () => {
-  if (resetCheckSchedule) return;
-
-  resetCheckSchedule = true;
-  const now = new Date();
-  const tomorrow = new Date(now);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  tomorrow.setHours(0, 0, 0, 0);
-
-  const msUntilReset = tomorrow.getTime() - now.getTime();
-
-  setTimeout(() => {
-    checkAndResetDailyStats();
-    resetCheckSchedule = false;
-    scheduleResetCheck();
-  }, msUntilReset);
-};
-
-const checkAndResetDailyStats = () => {
-  const today = new Date().toISOString().split("T")[0];
-  if (today !== lastResetDate) {
-    const yesterday = lastResetDate;
-    const statsRef = db.ref(`daily_stats/${yesterday}`);
-
-    statsRef.once("value", (snapshot) => {
-      if (snapshot.exists()) {
-        const yesterdayData = snapshot.val();
-        console.log(`Archived stats for ${yesterday}:`, yesterdayData);
-      }
-    });
-
-    const todayStatsRef = db.ref(`daily_stats/${today}`);
-    todayStatsRef.set({
-      total_kwh: 0,
-      total_cost: 0,
-      date: today,
-    });
-
-    lastResetDate = today;
-  }
-};
+let isNewDay = false;
 
 scheduleResetCheck();
-
 
 db.ref("/").on("value", (snapshot) => {
   const data = snapshot.val();
@@ -58,17 +20,15 @@ db.ref("/").on("value", (snapshot) => {
   if (data) {
     checkAndResetDailyStats();
 
+    const now = Date.now();
     let recordKwh = 0;
     let recordCost = 0;
+    const timeDiffMs = now - lastProcessTime;
+    const timeDiffHours = timeDiffMs / (1000 * 3600);
+    lastProcessTime = now;
 
     if (data.pwm !== undefined && data.pwm !== null && Number(data.pwm) > 0) {
-      const now = Date.now();
-      const timeDiffMs = now - lastProcessTime;
-      const timeDiffHours = timeDiffMs / (1000 * 3600);
-
-      if (timeDiffHours > 0 && timeDiffHours < 1) {
-     
-
+      if ((timeDiffHours > 0 && timeDiffHours < 1) || isNewDay) {
         const pwmRaw = Number(data.pwm) || 0;
         const pwmClamped = Math.max(0, Math.min(pwmRaw, MOTOR_SPECS.MAX_PWM));
         const pwmPercent = pwmClamped / MOTOR_SPECS.MAX_PWM;
@@ -77,11 +37,9 @@ db.ref("/").on("value", (snapshot) => {
           pwmPercent < MIN_EFFECTIVE_PWM_PERCENT
             ? 0
             : pwmPercent * MAX_POWER_WATT;
-          
+
         recordKwh = (currentWatt / 1000) * timeDiffHours;
         recordCost = recordKwh * TARIF_PLN_PER_KWH;
-
-        lastProcessTime = now;
 
         const today = new Date().toISOString().split("T")[0];
         const statsRef = db.ref(`daily_stats/${today}`);
@@ -116,6 +74,8 @@ db.ref("/").on("value", (snapshot) => {
               if (sensorHistory.length > MAX_HISTORY) {
                 sensorHistory.shift();
               }
+
+              isNewDay = false;
             });
           });
       }
